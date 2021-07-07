@@ -8,6 +8,9 @@ public class QuestionAnswerContorller {
 
     @GetMapping("/")
     public String home(){
-        return "home";
+        return "intro";
     }
+
+    @GetMapping("/question")
+    public String question() { return "question01"; }
 }
