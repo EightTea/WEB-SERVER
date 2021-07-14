@@ -1,32 +1,46 @@
 package com.bside.app.domain;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
+import javax.persistence.*;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@Table(name="user")
+@Entity
 public class User {
 
-    private Long id;
+    @Id
+    private Integer id;
     private String store_name;
-    private boolean status;
+    private Integer status;
+    private String email;
+    private String nick_name;
+    private Integer gender;
+    private String year;
 
-    public Long getId() {
-        return id;
-    }
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
 
-    public void setId(Long id) {
+
+    @Builder
+    public User(Integer id, String store_name, Integer status, String nick_name, String email, Integer gender, String year, Authority authority){
         this.id = id;
-    }
-
-    public String getStore_name() {
-        return store_name;
-    }
-
-    public void setStore_name(String store_name) {
         this.store_name = store_name;
-    }
-
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
         this.status = status;
+        this.nick_name = nick_name;
+        this.email = email;
+        this.gender = gender;
+        this.year = year;
+        this.authority = authority;
+    }
+
+    public UsernamePasswordAuthenticationToken toAuthentication(){
+        return new UsernamePasswordAuthenticationToken(id, email);
     }
 }
