@@ -55,7 +55,7 @@ public class SurveyAPIController {
             // 이미지 파일 처리
             MultipartFile mf = questionRequest.getFile();
             if( mf != null ) {
-                String s3Url = s3Uploader.upload(mf, "static" + File.pathSeparator + "upload");
+                String s3Url = s3Uploader.upload(mf, "static/upload");
                 question.setFileUrl(s3Url);
             }
             questionList.add(question);
