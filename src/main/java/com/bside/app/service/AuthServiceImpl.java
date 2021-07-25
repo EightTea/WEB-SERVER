@@ -4,10 +4,13 @@ import com.bside.app.controller.TokenForm;
 import com.bside.app.controller.UserForm;
 import com.bside.app.domain.JwtToken;
 import com.bside.app.domain.RefreshToken;
+import com.bside.app.domain.Survey;
 import com.bside.app.domain.User;
 import com.bside.app.jwt.*;
 import com.bside.app.repository.jwt.RefreshTokenRepository;
+import com.bside.app.repository.survey.SurveyRepository;
 import com.bside.app.repository.user.UserRepository;
+import io.jsonwebtoken.Jwt;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -31,7 +35,7 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Transactional
-    public int join(UserForm userForm){
+    public Integer join(UserForm userForm){
 
         User user = userForm.toUser();
         if(validateDuplicateUser(userForm.getId())){
@@ -62,6 +66,7 @@ public class AuthServiceImpl implements AuthService {
                 () -> { throw new RuntimeException("해당 유저가 없습니다."); });
     }
 
+    @Transactional
     private String generateJwtToken(User user){
         // 1. Login ID/PW(이메일로 대체)를 기반으로 AuthenticationToken 생성
         final UsernamePasswordAuthenticationToken authenticationToken = user.toAuthentication();
@@ -114,4 +119,11 @@ public class AuthServiceImpl implements AuthService {
         // 토큰 발급
         return jwtToken;
     }
+
+    public Integer verifyToken(String accessToken){
+        // Access Token 에서 Member Id 가져오기
+        Authentication authentication = tokenProvider.getAuthentication(accessToken);
+        return Integer.parseInt(authentication.getName());
+    }
+
 }

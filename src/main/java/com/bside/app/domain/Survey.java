@@ -30,6 +30,7 @@ public class Survey {
     private String title;
 
     private String content;
+    private String qrUrl;
 
     @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
     private List<Question> questions = new ArrayList<>();
