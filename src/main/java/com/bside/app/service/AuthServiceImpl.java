@@ -38,15 +38,23 @@ public class AuthServiceImpl implements AuthService {
     public Long join(UserForm userForm){
 
         User user = userForm.toUser();
-        if(validateDuplicateUser(userForm.getId())){
-            log.debug("이미 가입되어 있는 유저입니다.");
+        if(!validateDuplicateUser(userForm.getId())) {
+            log.debug("재가입입니다.");
             return userRepository.update(user).getId();
+        }else{
+            log.debug("새로운 회원가입니다.");
+            return userRepository.save(user).getId();
         }
-        return userRepository.save(user).getId();
     }
 
     private boolean validateDuplicateUser(Long user_id){
-        return userRepository.findById(user_id).isPresent();
+
+        Optional<User> findId = userRepository.findById(user_id);
+        // 새로운 회원가입
+        if(findId.isEmpty()) return true;
+        // 탈퇴 유저 검증
+        if(findId.get().getStatus() == 0) return false;
+        else throw new IllegalStateException("이미 가입되어 있는 유저입니다.");
     }
 
 
@@ -77,8 +85,6 @@ public class AuthServiceImpl implements AuthService {
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
         JwtToken jwtToken = tokenProvider.generateTokenInfo(authentication);
-        System.out.println(jwtToken.getAccessToken());
-        System.out.println(jwtToken.getRefreshToken());
 
         // 4. RefreshToken 저장
         RefreshToken refreshToken = RefreshToken.builder()

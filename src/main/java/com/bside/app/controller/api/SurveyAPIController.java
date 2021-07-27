@@ -75,7 +75,7 @@ public class SurveyAPIController {
 
         return new ApiResponse(200, "로그인 성공", data.toString());
     }
-
+/*
     @PostMapping("/{survey}/answer")
     public ApiResponse CreateAnswer ( @PathVariable("survey") int surveyNo , @RequestBody AnswerForm answerForm){
 
@@ -83,7 +83,9 @@ public class SurveyAPIController {
 
         return new ApiResponse(200, "답변 성공", null );
     }
-    
+
+
+ */
 
     @GetMapping("")
     public ApiResponse getSurveyList (){

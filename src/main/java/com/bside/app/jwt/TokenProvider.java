@@ -1,6 +1,7 @@
 package com.bside.app.jwt;
 
 import com.bside.app.domain.JwtToken;
+import com.mysql.cj.log.Log;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -18,6 +19,7 @@ import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 // 유저 정보로 JWT 토큰을 만들거나 토큰을 바탕으로 유저 정보를 가져옴
@@ -38,7 +40,6 @@ public class TokenProvider {
     }
 
     public JwtToken generateTokenInfo(Authentication authentication){
-        System.out.println("TokenProvider.generateTokenInfo");
         // 권한 가져오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -48,7 +49,6 @@ public class TokenProvider {
 
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
-        System.out.println("userId : " + authentication.getName());
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITES_KEY, authorities)
@@ -62,6 +62,8 @@ public class TokenProvider {
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 
+        log.debug("토큰을 발급합니다.\n" + "액세스 토큰 : " + accessToken);
+
         return JwtToken.builder()
                 .grantType(BEARER_TYPE)
                 .accessToken(accessToken)
@@ -71,7 +73,7 @@ public class TokenProvider {
     }
 
     public Authentication getAuthentication(String accessToken){
-        System.out.println("TokenProvider.getAuthentication");
+        log.debug("토큰을 검사합니다.\n" + "액세스 토큰 : " + accessToken);
         //토큰 복호화
         Claims claims = parseClaims(accessToken);
 

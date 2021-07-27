@@ -13,4 +13,5 @@ public interface UserRepository {
     User update(User user);
     void deleteById(User user);
     boolean existsById(Long id);
+    Optional<User> findByIdAndStatus(Long id, Integer status);
 }

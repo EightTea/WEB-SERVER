@@ -26,6 +26,12 @@ public class JpaUserRepository implements UserRepository{
         return Optional.ofNullable(findUser);
     }
 
+    public Optional<User> findByIdAndStatus(Long id, Integer status){
+        List<User> result = em.createQuery("select u from User u where u.id = ?1 and u.status = ?1", User.class)
+                .getResultList();
+        return result.stream().findAny();
+    }
+
     @Override
     public List<User> findAll() {
 

@@ -10,5 +10,5 @@ public interface AuthService {
     String login(Long id);
     void leave(Long id);
     JwtToken reissue(TokenForm tokenForm);
-//    Integer verifyToken(String accessToken);
+
 }
