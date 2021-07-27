@@ -15,7 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 @NoArgsConstructor
 public class UserForm {
 
-    private int id;
+    private Long id;
     private String store_name;
     private String email;
     private String nick_name;

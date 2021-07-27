@@ -6,9 +6,9 @@ import com.bside.app.domain.JwtToken;
 
 public interface AuthService {
 
-    Integer join(UserForm userForm);
-    String login(Integer id);
-    void leave(Integer id);
+    Long join(UserForm userForm);
+    String login(Long id);
+    void leave(Long id);
     JwtToken reissue(TokenForm tokenForm);
-    Integer verifyToken(String accessToken);
+//    Integer verifyToken(String accessToken);
 }

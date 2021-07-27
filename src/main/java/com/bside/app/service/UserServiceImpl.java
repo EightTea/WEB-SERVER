@@ -14,12 +14,12 @@ public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
 
-    public Optional<User> findOne(Integer userId){
+    public Optional<User> findOne(Long userId){
         return userRepository.findById(userId);
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> getMemberInfo(Integer id){
+    public Optional<User> getMemberInfo(Long id){
         Optional<User> findUser = userRepository.findById(id);
         findUser.orElseThrow(() -> new RuntimeException("유저 정보가 없습니다."));
         return findUser;

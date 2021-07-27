@@ -22,7 +22,7 @@ public class UserController {
      */
     @PostMapping("")
     public ResponseEntity<?> join(@RequestBody UserForm userForm){
-        int joinId = authService.join(userForm);
+        Long joinId = authService.join(userForm);
 
         JSONObject data = new JSONObject();
         data.put("access_token", authService.login(joinId));
@@ -35,7 +35,7 @@ public class UserController {
      * @param id
      */
     @GetMapping("/{id}")
-    public ApiResponse login(@PathVariable Integer id){
+    public ApiResponse login(@PathVariable Long id){
         JSONObject data = new JSONObject();
         data.put("access_token", authService.login(id));
 
@@ -43,7 +43,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse leave(@PathVariable Integer id){
+    public ApiResponse leave(@PathVariable Long id){
         authService.leave(id);
         return new ApiResponse(200, "회원 탈퇴");
     }

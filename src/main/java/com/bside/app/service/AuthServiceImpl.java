@@ -35,7 +35,7 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Transactional
-    public Integer join(UserForm userForm){
+    public Long join(UserForm userForm){
 
         User user = userForm.toUser();
         if(validateDuplicateUser(userForm.getId())){
@@ -45,13 +45,13 @@ public class AuthServiceImpl implements AuthService {
         return userRepository.save(user).getId();
     }
 
-    private boolean validateDuplicateUser(int user_id){
+    private boolean validateDuplicateUser(Long user_id){
         return userRepository.findById(user_id).isPresent();
     }
 
 
     @Transactional
-    public String login(Integer id){
+    public String login(Long id){
 
         // ID통해 user 찾기
         Optional<User> findOne = userService.findOne(id);
@@ -60,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Transactional
-    public void leave(Integer id) {
+    public void leave(Long id) {
         Optional<User> findOne = userRepository.findById(id);
         findOne.ifPresentOrElse( userRepository::deleteById,
                 () -> { throw new RuntimeException("해당 유저가 없습니다."); });
@@ -77,6 +77,8 @@ public class AuthServiceImpl implements AuthService {
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
         JwtToken jwtToken = tokenProvider.generateTokenInfo(authentication);
+        System.out.println(jwtToken.getAccessToken());
+        System.out.println(jwtToken.getRefreshToken());
 
         // 4. RefreshToken 저장
         RefreshToken refreshToken = RefreshToken.builder()
@@ -118,12 +120,6 @@ public class AuthServiceImpl implements AuthService {
 
         // 토큰 발급
         return jwtToken;
-    }
-
-    public Integer verifyToken(String accessToken){
-        // Access Token 에서 Member Id 가져오기
-        Authentication authentication = tokenProvider.getAuthentication(accessToken);
-        return Integer.parseInt(authentication.getName());
     }
 
 }

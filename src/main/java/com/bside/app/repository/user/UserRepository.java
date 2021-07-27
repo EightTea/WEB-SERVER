@@ -8,9 +8,9 @@ import java.util.Optional;
 public interface UserRepository {
 
     User save(User user);
-    Optional<User> findById(Integer id);
+    Optional<User> findById(Long id);
     List<User> findAll();
     User update(User user);
     void deleteById(User user);
-    boolean existsById(Integer id);
+    boolean existsById(Long id);
 }

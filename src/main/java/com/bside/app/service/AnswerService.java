@@ -3,7 +3,10 @@ package com.bside.app.service;
 import com.bside.app.domain.Answer;
 import com.bside.app.repository.answer.AnswerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -11,9 +14,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AnswerService {
 
-    private AnswerRepository answerRepository;
+    private final AnswerRepository answerRepository;
 
-    public List<Answer> findAnswers(Integer serveyId, Integer questionId){
-        return answerRepository.findAll(serveyId, questionId);
+    @Transactional
+    public Page<Answer> findAnswers(Long serveyId, Long questionId, Pageable pageable){
+        Page<Answer> answers = answerRepository.findBySurveyIdAndQuestionId(serveyId, questionId, pageable);
+        return answers;
     }
 }

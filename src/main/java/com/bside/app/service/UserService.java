@@ -17,7 +17,7 @@ import java.util.Optional;
 
 public interface UserService {
 
-    Optional<User> findOne(Integer id);
-    Optional<User> getMemberInfo(Integer id);
+    Optional<User> findOne(Long id);
+    Optional<User> getMemberInfo(Long id);
     Optional<User> getMyInfo();
 }

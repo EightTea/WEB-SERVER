@@ -21,7 +21,7 @@ public class JpaUserRepository implements UserRepository{
     }
 
     @Override
-    public Optional<User> findById(Integer id) {
+    public Optional<User> findById(Long id) {
         User findUser = em.find(User.class, id);
         return Optional.ofNullable(findUser);
     }
@@ -52,7 +52,7 @@ public class JpaUserRepository implements UserRepository{
     }
 
     @Override
-    public boolean existsById(Integer id) {
+    public boolean existsById(Long id) {
         return findById(id).isPresent();
     }
 }

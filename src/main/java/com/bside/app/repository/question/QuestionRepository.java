@@ -18,7 +18,7 @@ public class QuestionRepository {
         em.persist(question);
     }
 
-    public List<Question> findAll(Integer surverId){
+    public List<Question> findAll(Long surverId){
         List<Question> questionList = em.createQuery("select q from Question q where q.servey_id = :survey_id", Question.class)
                 .setParameter("survey_id", surverId)
                 .getResultList();

@@ -42,14 +42,14 @@ public class SurveyService {
     }
 
     @Transactional
-    public List<Survey> findServeys(Integer userId){
+    public List<Survey> findServeys(Long userId){
 
         List<Survey> surveyList = surveyRepository.findAll(userId);
         return surveyList;
     }
 
     @Transactional
-    public String findQrUrl(Integer surveyId){
+    public String findQrUrl(Long surveyId){
 
         Optional<Survey> qrUrlById = surveyRepository.findQrUrlById(surveyId);
         qrUrlById.orElseThrow(() -> {

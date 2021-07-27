@@ -19,15 +19,15 @@ public class SurveyRepository {
         em.persist(survey);
     }
 
-    public List<Survey> findAll(Integer userId){
-        List<Survey> surveyList = em.createQuery("select s from Survey s where s.user_id = :user_id", Survey.class)
-        .setParameter("user_id", userId)
+    public List<Survey> findAll(Long userId){
+        List<Survey> surveyList = em.createQuery("select s from Survey s where s.userId = :userId", Survey.class)
+        .setParameter("userId", userId)
         .getResultList();
 
         return surveyList;
     }
 
-    public Optional<Survey> findQrUrlById(Integer userId){
+    public Optional<Survey> findQrUrlById(Long userId){
         Survey survey = em.find(Survey.class, userId);
         return Optional.ofNullable(survey);
     }

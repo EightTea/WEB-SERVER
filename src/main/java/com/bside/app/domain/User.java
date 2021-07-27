@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class User {
 
     @Id
-    private Integer id;
+    private Long id;
     private String store_name;
     private Integer status;
     private String email;
@@ -29,7 +29,7 @@ public class User {
 
 
     @Builder
-    public User(Integer id, String store_name, Integer status, String nick_name, String email, Integer gender, String year, Authority authority){
+    public User(Long id, String store_name, Integer status, String nick_name, String email, Integer gender, String year, Authority authority){
         this.id = id;
         this.store_name = store_name;
         this.status = status;

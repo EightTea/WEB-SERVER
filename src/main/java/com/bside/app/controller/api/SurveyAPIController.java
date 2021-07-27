@@ -12,6 +12,10 @@ import com.bside.app.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,8 +38,8 @@ public class SurveyAPIController {
     private final AuthService authService;
     private final S3Uploader s3Uploader;
 
-    @Value("${config.baseDomain}")
-    String baseDomain;
+//    @Value("${config.baseDomain}")
+    String baseDomain = "/";
 
     @PostMapping("")
     public ApiResponse CreateSurvey( @ModelAttribute SurveyForm surveyForm ) throws Exception {
@@ -79,11 +83,13 @@ public class SurveyAPIController {
 
         return new ApiResponse(200, "답변 성공", null );
     }
+    
 
     @GetMapping("")
-    public ApiResponse getSurveyList (@RequestHeader(value = "Authorization") String accessToken){
-        Integer userId = authService.verifyToken(accessToken);
-        List<Survey> surveyList = surveyService.findServeys(userId);
+    public ApiResponse getSurveyList (){
+        String check = SecurityContextHolder.getContext().getAuthentication().toString();
+        System.out.println("check = " + check);
+        List<Survey> surveyList = surveyService.findServeys(1L);
 
         JSONArray allData = new JSONArray();
         surveyList.forEach( survey -> {
@@ -101,9 +107,8 @@ public class SurveyAPIController {
     }
 
     @GetMapping("/{survey_id}")
-    public ApiResponse getSurveyDetails (@RequestHeader(value = "Authorization") String accessToken, @PathVariable("survey_id") int surveyId){
+    public ApiResponse getSurveyDetails (@PathVariable("survey_id") Long surveyId){
 
-        Integer userId = authService.verifyToken(accessToken);
         String qrUrl = surveyService.findQrUrl(surveyId);
 
         List<Question> questionList = questionService.findQuestions(surveyId);
@@ -128,33 +133,19 @@ public class SurveyAPIController {
 
     /**
      * 설문조사 답변 리스트
-     * @param accessToken
-     * @param pageNo - 현재 5개 기준으로 작성중
+     * @param pageable - 현재 10개 기준으로 작성중
      * @param surveyId
      * @param questionId
      * @return
      */
 
     @GetMapping("/{survey_id}/{question_id}")
-    public ApiResponse getSurveyDetails (@RequestHeader(value = "Authorization") String accessToken, @RequestBody int pageNo, @PathVariable("survey_id") int surveyId, @PathVariable("question_id") int questionId){
+    public ApiResponse getSurveyDetails (@PageableDefault(size = 10) Pageable pageable, @PathVariable("survey_id") Long surveyId, @PathVariable("question_id") Long questionId){
+        Page<Answer> answerList = answerService.findAnswers(surveyId, questionId, pageable);
+        JSONObject data = new JSONObject();
+        data.put("answer", answerList.getContent());
+        data.put("is_more", answerList.getTotalPages() > pageable.getPageNumber());
 
-        Integer userId = authService.verifyToken(accessToken);
-
-        List<Answer> answerList = answerService.findAnswers(surveyId, questionId);
-
-        JSONArray answers = new JSONArray();
-        answerList.forEach(answer -> {
-            JSONObject data = new JSONObject();
-            data.put("answer_id", answer.getId());
-            data.put("answer_no", answer.getTargetSeq());
-            data.put("comment", answer.getComment());
-            data.put("date", answer.getDate());
-            answers.put(data);
-        });
-
-        JSONObject allData = new JSONObject();
-        allData.put("data", answers);
-
-        return new ApiResponse(200, "성공", allData.toString());
+        return new ApiResponse(200, "성공", data.toString());
     }
 }

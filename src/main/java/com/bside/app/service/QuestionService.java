@@ -17,7 +17,7 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final TokenProvider tokenProvider;
 
-    public List<Question> findQuestions(Integer serveyId){
+    public List<Question> findQuestions(Long serveyId){
 
         List<Question> questionList = questionRepository.findAll(serveyId);
 

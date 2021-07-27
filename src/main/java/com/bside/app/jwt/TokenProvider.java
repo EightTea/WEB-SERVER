@@ -38,6 +38,7 @@ public class TokenProvider {
     }
 
     public JwtToken generateTokenInfo(Authentication authentication){
+        System.out.println("TokenProvider.generateTokenInfo");
         // 권한 가져오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -47,6 +48,7 @@ public class TokenProvider {
 
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+        System.out.println("userId : " + authentication.getName());
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITES_KEY, authorities)
@@ -69,8 +71,9 @@ public class TokenProvider {
     }
 
     public Authentication getAuthentication(String accessToken){
+        System.out.println("TokenProvider.getAuthentication");
         //토큰 복호화
-        Claims  claims = parseClaims(accessToken);
+        Claims claims = parseClaims(accessToken);
 
         if(claims.get(AUTHORITES_KEY) == null){
             throw new RuntimeException("권한 정보가 없는 토큰입니다.");
@@ -89,6 +92,7 @@ public class TokenProvider {
     }
 
     public boolean validateToken(String token){
+
         try{
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
@@ -104,6 +108,7 @@ public class TokenProvider {
         return false;
     }
 
+    // 토큰에서 값 추출
     private Claims parseClaims(String accessToken){
         try{
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
