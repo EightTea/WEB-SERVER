@@ -19,7 +19,7 @@ public class UserForm {
     private String store_name;
     private String email;
     private String nick_name;
-    private int gender;
+    private Integer gender;
     private String year;
 
     public User toUser(){
