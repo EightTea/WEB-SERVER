@@ -10,6 +10,7 @@ import com.bside.app.service.QuestionService;
 import com.bside.app.service.SurveyService;
 import com.bside.app.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -25,8 +26,11 @@ import org.json.*;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/survey")
@@ -89,23 +93,23 @@ public class SurveyAPIController {
 
     @GetMapping("")
     public ApiResponse getSurveyList (){
-        String check = SecurityContextHolder.getContext().getAuthentication().toString();
-        System.out.println("check = " + check);
-        List<Survey> surveyList = surveyService.findServeys(1L);
+        Long userId = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName());
+        log.debug("/survey : " + userId);
+        List<Survey> surveyList = surveyService.findServeys(userId);
 
-        JSONArray allData = new JSONArray();
+        Map<String, Object> allData = new HashMap<>();
         surveyList.forEach( survey -> {
-            JSONObject data = new JSONObject();
+            Map<String, Object> data = new HashMap<>();
             data.put("survey_id", survey.getId());
             data.put("start_data", survey.getStartDate());
             data.put("end_data", survey.getEndDate());
             data.put("status", survey.getStatus());
             data.put("title", survey.getTitle());
             data.put("content", survey.getContent());
-            allData.put(data);
+            allData.put("",data);
         });
 
-        return new ApiResponse(200, "성공", allData.toString());
+        return new ApiResponse(200, "성공", allData);
     }
 
     @GetMapping("/{survey_id}")
@@ -114,7 +118,7 @@ public class SurveyAPIController {
         String qrUrl = surveyService.findQrUrl(surveyId);
 
         List<Question> questionList = questionService.findQuestions(surveyId);
-        JSONArray questions = new JSONArray();
+        Map<String, Object> questions = new HashMap<>();
 
         questionList.forEach(question -> {
             JSONObject data = new JSONObject();
@@ -122,15 +126,15 @@ public class SurveyAPIController {
             data.put("no", question.getNo());
             data.put("content", question.getContent());
             data.put("image", question.getFileUrl());
-            questions.put(data);
+            questions.put("",data);
         });
 
-        JSONObject allData = new JSONObject();
+        Map<String, Object> allData = new HashMap<>();
         allData.put("survey_id", surveyId);
         allData.put("qrcode_url", qrUrl);
         allData.put("question", questions);
 
-        return new ApiResponse(200, "성공", allData.toString());
+        return new ApiResponse(200, "성공", allData);
     }
 
     /**
@@ -144,10 +148,10 @@ public class SurveyAPIController {
     @GetMapping("/{survey_id}/{question_id}")
     public ApiResponse getSurveyDetails (@PageableDefault(size = 10) Pageable pageable, @PathVariable("survey_id") Long surveyId, @PathVariable("question_id") Long questionId){
         Page<Answer> answerList = answerService.findAnswers(surveyId, questionId, pageable);
-        JSONObject data = new JSONObject();
+        Map<String, Object> data = new HashMap<>();
         data.put("answer", answerList.getContent());
         data.put("is_more", answerList.getTotalPages() > pageable.getPageNumber());
 
-        return new ApiResponse(200, "성공", data.toString());
+        return new ApiResponse(200, "성공", data);
     }
 }

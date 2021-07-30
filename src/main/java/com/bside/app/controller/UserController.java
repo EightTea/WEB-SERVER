@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
@@ -16,36 +19,24 @@ public class UserController {
     private final AuthService authService;
 
     /**
-     * 회원가입
+     * 회원가입 또는 로그인
      * @param userForm
      * @return
      */
     @PostMapping("")
-    public ResponseEntity<?> join(@RequestBody UserForm userForm){
+    public ResponseEntity<?> joinOrLogin(@RequestBody UserForm userForm){
         Long joinId = authService.join(userForm);
 
-        JSONObject data = new JSONObject();
+        Map<String, Object> data = new HashMap<>();
         data.put("access_token", authService.login(joinId));
 
-        return new ResponseEntity<>(new ApiResponse("회원가입 성공", data.toString()),HttpStatus.OK);
-    }
-
-    /**
-     * 로그인
-     * @param id
-     */
-    @GetMapping("/{id}")
-    public ApiResponse login(@PathVariable Long id){
-        JSONObject data = new JSONObject();
-        data.put("access_token", authService.login(id));
-
-        return new ApiResponse(200, "로그인 성공", data.toString());
+        return new ResponseEntity<>(new ApiResponse("회원가입/로그인 성공", data),HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse leave(@PathVariable Long id){
+    public ResponseEntity<?> leave(@PathVariable Long id){
         authService.leave(id);
-        return new ApiResponse(200, "회원 탈퇴");
+        return new ResponseEntity<>(new ApiResponse(200, "회원 탈퇴"), HttpStatus.OK);
     }
 
     /**

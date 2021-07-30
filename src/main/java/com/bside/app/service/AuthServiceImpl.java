@@ -38,23 +38,34 @@ public class AuthServiceImpl implements AuthService {
     public Long join(UserForm userForm){
 
         User user = userForm.toUser();
-        if(!validateDuplicateUser(userForm.getId())) {
-            log.debug("재가입입니다.");
-            return userRepository.update(user).getId();
-        }else{
-            log.debug("새로운 회원가입니다.");
+        int validateResult = validateDuplicateUser(userForm.getId());
+        // 비회원이면 회원가입으로 진행
+        if(validateResult == 0) {
+            log.debug("새로운 회원가입 : " + userForm.getId());
             return userRepository.save(user).getId();
         }
+        // 탈퇴회원이었으면 상태변경
+        else if(validateResult == 1){
+            log.debug("탈퇴회원 상태 변경 : " + userForm.getId());
+            return userRepository.update(user).getId();
+        }
+        else return user.getId();
     }
 
-    private boolean validateDuplicateUser(Long user_id){
+    /**
+     * 사용자 검증
+     * @param user_id
+     * @return 비회원 : 0, 탈퇴회원 : 1, 회원 : 2
+     */
+    private int validateDuplicateUser(Long user_id){
 
         Optional<User> findId = userRepository.findById(user_id);
-        // 새로운 회원가입
-        if(findId.isEmpty()) return true;
-        // 탈퇴 유저 검증
-        if(findId.get().getStatus() == 0) return false;
-        else throw new IllegalStateException("이미 가입되어 있는 유저입니다.");
+        // 비회원일 때
+        if(findId.isEmpty()) return 0;
+        // 탈퇴회원일 때
+        else if(findId.get().getStatus() == 0) return 1;
+        // 회원일 때
+        else return 2;
     }
 
 
@@ -64,7 +75,6 @@ public class AuthServiceImpl implements AuthService {
         // ID통해 user 찾기
         Optional<User> findOne = userService.findOne(id);
         return findOne.map(this::generateJwtToken).orElseThrow(() -> new RuntimeException("해당 유저가 없습니다."));
-
     }
 
     @Transactional
