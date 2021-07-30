@@ -1,18 +1,18 @@
 package com.bside.app.repository.user;
 
 import com.bside.app.domain.User;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class JpaUserRepository implements UserRepository{
 
-    private final EntityManager em;
-
-    public JpaUserRepository(EntityManager em) {
-        this.em = em;
-    }
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
     public User save(User user) {
@@ -24,12 +24,6 @@ public class JpaUserRepository implements UserRepository{
     public Optional<User> findById(Long id) {
         User findUser = em.find(User.class, id);
         return Optional.ofNullable(findUser);
-    }
-
-    public Optional<User> findByIdAndStatus(Long id, Integer status){
-        List<User> result = em.createQuery("select u from User u where u.id = ?1 and u.status = ?1", User.class)
-                .getResultList();
-        return result.stream().findAny();
     }
 
     @Override
@@ -44,7 +38,7 @@ public class JpaUserRepository implements UserRepository{
         User findOne = em.find(User.class, newUser.getId());
         findOne.setStore_name(newUser.getStore_name());
         findOne.setEmail(newUser.getEmail());
-        findOne.setNick_name(newUser.getNick_name());
+        findOne.setNickName(newUser.getNickName());
         findOne.setGender(newUser.getGender());
         findOne.setYear(newUser.getYear());
         findOne.setStatus(1);
@@ -53,8 +47,16 @@ public class JpaUserRepository implements UserRepository{
     }
 
     @Override
-    public void deleteById(User user) {
-        user.setStatus(0);
+    public User setStatusById(Long id) {
+        User findUser = em.find(User.class, id);
+        findUser.setStatus(0);
+        return findUser;
+    }
+
+    @Override
+    public void deleteById(Long id){
+        User findUser = em.find(User.class, id);
+        em.remove(findUser);
     }
 
     @Override

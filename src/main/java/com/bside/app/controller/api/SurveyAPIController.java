@@ -5,7 +5,6 @@ import com.bside.app.domain.Question;
 import com.bside.app.domain.Survey;
 import com.bside.app.response.ApiResponse;
 import com.bside.app.service.AnswerService;
-import com.bside.app.service.AuthService;
 import com.bside.app.service.QuestionService;
 import com.bside.app.service.SurveyService;
 import com.bside.app.util.S3Uploader;
@@ -21,10 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
-import org.json.*;
-
-import java.io.File;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,11 +34,10 @@ public class SurveyAPIController {
     private final SurveyService surveyService;
     private final QuestionService questionService;
     private final AnswerService answerService;
-    private final AuthService authService;
     private final S3Uploader s3Uploader;
 
-//    @Value("${config.baseDomain}")
-    String baseDomain = "/";
+    @Value("${config.baseDomain}")
+    String baseDomain;
 
     @PostMapping("")
     public ApiResponse CreateSurvey( @ModelAttribute SurveyForm surveyForm ) throws Exception {

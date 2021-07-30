@@ -1,7 +1,6 @@
 package com.bside.app.repository.question;
 
 import com.bside.app.domain.Question;
-import com.bside.app.domain.Survey;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

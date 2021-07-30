@@ -11,7 +11,7 @@ public interface UserRepository {
     Optional<User> findById(Long id);
     List<User> findAll();
     User update(User user);
-    void deleteById(User user);
+    User setStatusById(Long id);
+    void deleteById(Long id);
     boolean existsById(Long id);
-    Optional<User> findByIdAndStatus(Long id, Integer status);
 }

@@ -1,15 +1,10 @@
 package com.bside.app.service;
 
-import com.bside.app.controller.api.SurveyForm;
-import com.bside.app.domain.JwtToken;
 import com.bside.app.domain.Question;
 import com.bside.app.domain.Survey;
-import com.bside.app.jwt.TokenProvider;
 import com.bside.app.repository.question.QuestionRepository;
 import com.bside.app.repository.survey.SurveyRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

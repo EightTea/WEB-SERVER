@@ -1,9 +1,6 @@
 package com.bside.app.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import javax.persistence.*;
@@ -20,7 +17,7 @@ public class User {
     private String store_name;
     private Integer status;
     private String email;
-    private String nick_name;
+    private String nickName;
     private Integer gender;
     private String year;
 
@@ -33,7 +30,7 @@ public class User {
         this.id = id;
         this.store_name = store_name;
         this.status = status;
-        this.nick_name = nick_name;
+        this.nickName = nick_name;
         this.email = email;
         this.gender = gender;
         this.year = year;
@@ -42,5 +39,19 @@ public class User {
 
     public UsernamePasswordAuthenticationToken toAuthentication(){
         return new UsernamePasswordAuthenticationToken(id, email);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", store_name='" + store_name + '\'' +
+                ", status=" + status +
+                ", email='" + email + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", gender=" + gender +
+                ", year='" + year + '\'' +
+                ", authority=" + authority +
+                '}';
     }
 }

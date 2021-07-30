@@ -1,6 +1,5 @@
 package com.bside.app.repository.survey;
 
-import com.bside.app.domain.Question;
 import com.bside.app.domain.Survey;
 import org.springframework.stereotype.Repository;
 
