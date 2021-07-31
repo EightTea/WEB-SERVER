@@ -47,17 +47,11 @@ public class SurveyAPIController {
         String surveyContent = surveyForm.getContent();
         System.out.println("surveyContent = " + surveyContent);
 
-
         List<Question> questionList = new ArrayList<Question>();
 
-//
-//        System.out.println("questionList = " + questionList);
-//        SurveyForm.QuestionRequest[] questionRequests = surveyForm.getQuestion();
-//        System.out.println("questionRequests = " + questionRequests);
-        // int[] questionNo = surveyForm.getQuestionNo();
         ArrayList<String> questionContentList = surveyForm.getQuestionContentList();
         ArrayList<MultipartFile> questionFileList = surveyForm.getQuestionFileList();
-        
+
         if ( questionContentList != null ) {
             for (int i = 0; i < questionContentList.size(); i++) {
 
