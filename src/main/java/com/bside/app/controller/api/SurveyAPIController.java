@@ -43,25 +43,36 @@ public class SurveyAPIController {
     public ApiResponse CreateSurvey( @ModelAttribute SurveyForm surveyForm ) throws Exception {
 
         String surveyTitle = surveyForm.getTitle();
+        System.out.println("surveyTitle = " + surveyTitle);
         String surveyContent = surveyForm.getContent();
+        System.out.println("surveyContent = " + surveyContent);
+
 
         List<Question> questionList = new ArrayList<Question>();
-        SurveyForm.QuestionRequest[] questionRequests = surveyForm.getQuestion();
-        for( int i = 0 ; i < questionRequests.length ; i ++ ){
 
-            SurveyForm.QuestionRequest questionRequest = questionRequests[i];
+//
+//        System.out.println("questionList = " + questionList);
+//        SurveyForm.QuestionRequest[] questionRequests = surveyForm.getQuestion();
+//        System.out.println("questionRequests = " + questionRequests);
+        // int[] questionNo = surveyForm.getQuestionNo();
+        ArrayList<String> questionContentList = surveyForm.getQuestionContentList();
+        ArrayList<MultipartFile> questionFileList = surveyForm.getQuestionFileList();
+        
+        if ( questionContentList != null ) {
+            for (int i = 0; i < questionContentList.size(); i++) {
 
-            Question question = new Question();
-            question.setContent( questionRequest.getContent() );
-            question.setNo( (i+1) );
+                Question question = new Question();
+                question.setContent(questionContentList.get(i));
+                question.setNo(i + 1);
 
-            // 이미지 파일 처리
-            MultipartFile mf = questionRequest.getFile();
-            if( mf != null ) {
-                String s3Url = s3Uploader.upload(mf, "static/upload");
-                question.setFileUrl(s3Url);
+                // 이미지 파일 처리
+                MultipartFile mf = questionFileList.get(i);
+                if (mf != null) {
+                    String s3Url = s3Uploader.upload(mf, "static/upload");
+                    question.setFileUrl(s3Url);
+                }
+                questionList.add(question);
             }
-            questionList.add(question);
         }
 
         Long userId = 2L; // TODO token 을 통해서 userId 가져와야함
@@ -73,17 +84,23 @@ public class SurveyAPIController {
 
         return new ApiResponse(200, "로그인 성공", data.toString());
     }
-/*
+
     @PostMapping("/{survey}/answer")
-    public ApiResponse CreateAnswer ( @PathVariable("survey") int surveyNo , @RequestBody AnswerForm answerForm){
+    public ApiResponse CreateAnswer ( @PathVariable("survey") int surveyNo , @ModelAttribute AnswerForm answerForm){
 
+        System.out.println("surveyNo = " + surveyNo);
+        System.out.println("answerForm = " + answerForm);
 
+        for( AnswerForm.AnswerRequest answerRequest :answerForm.getAnswer()) {
+            System.out.println( answerRequest.getQuestionId() );
+            System.out.println( answerRequest.getCommment() );
+        }
 
         return new ApiResponse(200, "답변 성공", null );
     }
 
 
- */
+
 
     @GetMapping("")
     public ApiResponse getSurveyList (){

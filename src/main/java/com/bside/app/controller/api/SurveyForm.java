@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Getter @Setter
 public class SurveyForm {
@@ -14,13 +15,19 @@ public class SurveyForm {
     // data 보내는 형식 : question[0].file = { multipart 객체 }
     private String title;
     private String content;
-    private QuestionRequest[] question;
 
-    @Data
-    static class QuestionRequest{
-        // private int no;
-        private String content;
-        private MultipartFile file;
-    }
+    // private int[] questionNo;
+    private ArrayList<String> questionContentList;
+    private ArrayList<MultipartFile> questionFileList;
+
+//    private QuestionRequest[] question;
+//
+//
+//    @Data
+//    class QuestionRequest{
+//        // private int no;
+//        private String content;
+//        private MultipartFile file;
+//    }
 }
 
