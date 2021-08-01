@@ -1,10 +1,12 @@
 package com.bside.app.repository.question;
 
 import com.bside.app.domain.Question;
+import com.bside.app.domain.Survey;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.List;
 
 @Repository
@@ -18,10 +20,8 @@ public class QuestionRepository {
     }
 
     public List<Question> findAll(Long surverId){
-        List<Question> questionList = em.createQuery("select q from Question q where q.servey_id = :survey_id", Question.class)
-                .setParameter("survey_id", surverId)
+        List<Question> questionList = em.createQuery("select q from Question q where q.survey.id = 2", Question.class)
                 .getResultList();
-
         return questionList;
     }
 

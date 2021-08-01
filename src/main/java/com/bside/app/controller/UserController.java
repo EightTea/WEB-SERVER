@@ -2,6 +2,7 @@ package com.bside.app.controller;
 
 import com.bside.app.response.ApiResponse;
 import com.bside.app.service.UserService;
+import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
 
     private final UserService userService;

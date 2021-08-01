@@ -38,7 +38,6 @@ class UserServiceTest {
     void joinNewUser(){
         // given
         User user = new User(1L, "가게 이름", 1, "닉네임", "aaa@gmail.com", 1, "2000", Authority.ROLE_USER);
-        System.out.println(user);
 
         // when
         userService.join(user);

@@ -100,7 +100,7 @@ public class SurveyAPIController {
     @GetMapping("")
     public ApiResponse getSurveyList (){
         Long userId = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName());
-        log.debug("/survey : " + userId);
+        log.info("/survey : " + userId);
         List<Survey> surveyList = surveyService.findServeys(userId);
 
         Map<String, Object> allData = new HashMap<>();
@@ -124,15 +124,16 @@ public class SurveyAPIController {
         String qrUrl = surveyService.findQrUrl(surveyId);
 
         List<Question> questionList = questionService.findQuestions(surveyId);
-        Map<String, Object> questions = new HashMap<>();
+        List<Object> questions = new ArrayList<>();
+        log.info("조회된 question 리스트 : " + questionList.size());
 
         questionList.forEach(question -> {
-            JSONObject data = new JSONObject();
+            Map<String, Object> data = new HashMap<>();
             data.put("question_id", question.getId());
             data.put("no", question.getNo());
             data.put("content", question.getContent());
             data.put("image", question.getFileUrl());
-            questions.put("",data);
+            questions.add(data);
         });
 
         Map<String, Object> allData = new HashMap<>();
