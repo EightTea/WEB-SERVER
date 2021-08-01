@@ -10,11 +10,13 @@ import com.bside.app.service.SurveyService;
 import com.bside.app.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
+    import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,7 +30,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/survey")
+@RequestMapping("/api/survey")
 public class SurveyAPIController {
 
     private final SurveyService surveyService;
@@ -42,10 +44,10 @@ public class SurveyAPIController {
     @PostMapping("")
     public ApiResponse CreateSurvey( @ModelAttribute SurveyForm surveyForm ) throws Exception {
 
+        Long userId = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName());
+
         String surveyTitle = surveyForm.getTitle();
-        System.out.println("surveyTitle = " + surveyTitle);
         String surveyContent = surveyForm.getContent();
-        System.out.println("surveyContent = " + surveyContent);
 
         List<Question> questionList = new ArrayList<Question>();
 
@@ -60,23 +62,24 @@ public class SurveyAPIController {
                 question.setNo(i + 1);
 
                 // 이미지 파일 처리
-                MultipartFile mf = questionFileList.get(i);
-                if (mf != null) {
-                    String s3Url = s3Uploader.upload(mf, "static/upload");
-                    question.setFileUrl(s3Url);
+                if( questionFileList.get(i) != null ) {
+                    MultipartFile mf = questionFileList.get(i);
+                    if (mf != null && !mf.isEmpty()) {
+                        String s3Url = s3Uploader.upload(mf, "static/upload");
+                        question.setFileUrl(s3Url);
+                    }
                 }
                 questionList.add(question);
             }
         }
 
-        Long userId = 2L; // TODO token 을 통해서 userId 가져와야함
         Long surveyId = surveyService.survey(surveyTitle, surveyContent, userId, questionList );
 
-        JSONObject data = new JSONObject();
-        data.append("survey_id" , surveyId.longValue() );
-        data.append("qrcode_url",baseDomain + "/" + surveyId +"/view");
+        Map map = new HashMap();
+        map.put("survey_id" , surveyId.longValue() );
+        map.put("qrcode_url",baseDomain + "/" + surveyId +"/view");
 
-        return new ApiResponse(200, "로그인 성공", data.toString());
+        return new ApiResponse(200, "설문지 등록 성공", map);
     }
 
     @PostMapping("/{survey}/answer")
@@ -92,8 +95,6 @@ public class SurveyAPIController {
 
         return new ApiResponse(200, "답변 성공", null );
     }
-
-
 
 
     @GetMapping("")

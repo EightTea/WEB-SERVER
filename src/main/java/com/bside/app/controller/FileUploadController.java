@@ -1,4 +1,4 @@
-package com.bside.app.controller.web;
+package com.bside.app.controller;
 
 import com.bside.app.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
