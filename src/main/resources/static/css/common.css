@@ -271,13 +271,13 @@ button{
   height: 51px;
   background: #339AF0;
   
-  font-size: 18px;
   font-family: Noto Sans KR;
+  font-style: normal;
   font-weight: bold;
-  align-items: center;
-  text-align: center;
+  font-size: 18px;
+  line-height: 25px;
   color: #FFFFFF;
-  line-height: 26px;
+  line-height: 25px;
 }
 
 .footer > .btn.disabled{
