@@ -103,7 +103,7 @@ public class SurveyAPIController {
         log.info("/survey : " + userId);
         List<Survey> surveyList = surveyService.findServeys(userId);
 
-        List<Object> allData = new ArrayList<>();
+        List<Object> surveyData = new ArrayList<>();
         surveyList.forEach( survey -> {
             Map<String, Object> data = new HashMap<>();
             data.put("survey_id", survey.getId());
@@ -112,8 +112,11 @@ public class SurveyAPIController {
             data.put("status", survey.getStatus());
             data.put("title", survey.getTitle());
             data.put("content", survey.getContent());
-            allData.add(data);
+            surveyData.add(data);
         });
+
+        Map<String, Object> allData = new HashMap<>();
+        allData.put("survey_list", surveyData);
 
         return new ApiResponse(200, "성공", allData);
     }
