@@ -1,4 +1,4 @@
-package com.bside.app.controller;
+package com.bside.app.controller.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

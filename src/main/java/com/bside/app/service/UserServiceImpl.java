@@ -1,6 +1,6 @@
 package com.bside.app.service;
 
-import com.bside.app.controller.TokenForm;
+import com.bside.app.controller.user.TokenForm;
 import com.bside.app.domain.JwtToken;
 import com.bside.app.domain.RefreshToken;
 import com.bside.app.domain.User;
@@ -68,6 +68,13 @@ public class UserServiceImpl implements UserService{
         // ID통해 user 찾기
         Optional<User> findOne = this.findOne(id);
         return findOne.map(this::generateJwtToken).orElseThrow(() -> new IllegalStateException("해당 유저가 없습니다."));
+    }
+
+    @Transactional
+    public Long updateStore(Long id, String storeName){
+        User user = this.findOne(id).get();
+        user.setStoreName(storeName);
+        return userRepository.update(user).getId();
     }
 
     @Transactional

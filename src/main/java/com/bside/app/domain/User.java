@@ -14,7 +14,8 @@ public class User {
 
     @Id
     private Long id;
-    private String store_name;
+    @Column(name="store_name")
+    private String storeName;
     private Integer status;
     private String email;
     private String nickName;
@@ -26,11 +27,11 @@ public class User {
 
 
     @Builder
-    public User(Long id, String store_name, Integer status, String nick_name, String email, Integer gender, String year, Authority authority){
+    public User(Long id, String store_name, Integer status, String nickName, String email, Integer gender, String year, Authority authority){
         this.id = id;
-        this.store_name = store_name;
+        this.storeName = store_name;
         this.status = status;
-        this.nickName = nick_name;
+        this.nickName = nickName;
         this.email = email;
         this.gender = gender;
         this.year = year;
@@ -45,7 +46,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", store_name='" + store_name + '\'' +
+                ", storeName='" + storeName + '\'' +
                 ", status=" + status +
                 ", email='" + email + '\'' +
                 ", nickName='" + nickName + '\'' +

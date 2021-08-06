@@ -1,10 +1,8 @@
-package com.bside.app.controller;
+package com.bside.app.controller.user;
 
 import com.bside.app.response.ApiResponse;
 import com.bside.app.service.UserService;
-import lombok.Generated;
 import lombok.RequiredArgsConstructor;
-import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +36,13 @@ public class UserController {
     public ResponseEntity<?> leave(@PathVariable Long id){
         userService.leave(id);
         return new ResponseEntity<>(new ApiResponse(200, "회원 탈퇴"), HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UpdateUserForm updateForm){
+
+        userService.updateStore(id, updateForm.getStoreName());
+        return new ResponseEntity<>(new ApiResponse(200, "가게이름 업데이트 성공"),HttpStatus.OK);
     }
 
     /**
