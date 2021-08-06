@@ -54,7 +54,7 @@ public class Survey {
         }
 
         survey.setStartDate( LocalDateTime.now() );
-        survey.setStatus(SurveyStatus.PENDING);
+        survey.setStatus(SurveyStatus.IN_PROGRESS);
 
         return survey;
     }
