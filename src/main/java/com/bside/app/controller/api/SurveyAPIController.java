@@ -3,6 +3,7 @@ package com.bside.app.controller.api;
 import com.bside.app.domain.Answer;
 import com.bside.app.domain.Question;
 import com.bside.app.domain.Survey;
+import com.bside.app.domain.SurveyStatus;
 import com.bside.app.response.ApiResponse;
 import com.bside.app.service.AnswerService;
 import com.bside.app.service.QuestionService;
@@ -163,5 +164,13 @@ public class SurveyAPIController {
         data.put("is_more", answerList.getTotalPages() > pageable.getPageNumber());
 
         return new ApiResponse(200, "성공", data);
+    }
+
+    @PutMapping("/{survey_id}")
+    public ApiResponse changeSurveyStatus(@PathVariable("survey_id") Long surveyId, @RequestBody UpdateSurveyForm surveyForm){
+        log.info("change Status : " + surveyForm.getStatus());
+        Integer integer = surveyService.updateSurveyStatus(surveyId, surveyForm.getStatus());
+        log.info("updateResult : "+integer);
+        return new ApiResponse(200, "성공", null);
     }
 }

@@ -148,10 +148,10 @@ public class UserServiceImpl implements UserService{
 
     // 현재 SecurityContext 에 있는 유저 정보 가져오기(토큰에 있는 유저 정보)
     @Transactional(readOnly = true)
-    public Optional<User> getMyInfo(){
+    public User getMyInfo(){
 
         Optional<User> findUser = userRepository.findById(SecurityUtil.getCurrentMemberId());
         findUser.orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
-        return findUser;
+        return findUser.get();
     }
 }

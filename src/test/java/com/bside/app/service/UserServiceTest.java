@@ -142,7 +142,7 @@ class UserServiceTest {
         Authentication authentication = tokenProvider.getAuthentication(token.getAccessToken());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        User getUser = userService.getMyInfo().get();
+        User getUser = userService.getMyInfo();
 
         // then
         assertThat(getUser).isEqualTo(user);

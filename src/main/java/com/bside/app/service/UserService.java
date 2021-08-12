@@ -15,5 +15,5 @@ public interface UserService {
     void leave(Long id);
     JwtToken reissue(TokenForm tokenForm);
     Optional<User> findOne(Long id);
-    Optional<User> getMyInfo();
+    User getMyInfo();
 }
