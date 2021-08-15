@@ -1,12 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=2.0, minimum-scale=1.0, user-scalable=yes" />
-  <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../static/css/common.css">
+<html xmlns:th="http://thymeleaf.org">
+<head th:replace="fragments/header :: header">
   <title>Title</title>
 </head>
 <style>
@@ -15,17 +9,17 @@
 <body>
   <div class="container">
     <div class="top">
-      <a class="bottom" onclick="#">
+      <a class="bottom" href="#">
         <div class="arrow-left">
         </div>
       </a>
     </div>
-    
+
     <div class="intro-title">
       <span class="text">
         우리 가게 방문 이유 확인
       </span>
-      <img class="intro-image" src="../static/img/Saly-26.png"/>
+      <img class="intro-image" src="/img/Saly-26.png"/>
     </div>
     
     <div class="sub-content intro">
@@ -37,11 +31,17 @@
     </div>
     
     <div class="footer">
-      <button class="btn" href="/question">
+      <button class="btn" onclick="fnGoAnswer(); return false;">
         답변 렛츠 고!
       </button>
     </div>
       
   </div>
 </body>
+<script>
+function fnGoAnswer() {
+  document.location.href="/survey/1/answer";
+}
+
+</script>
 </html>

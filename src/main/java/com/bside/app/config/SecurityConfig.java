@@ -22,7 +22,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web){
         web.ignoring()
-                .antMatchers("/h2-console/**", "/favicon.ico");
+            .antMatchers("/h2-console/**", "/favicon.ico")
+            .antMatchers("/css/**","/js/**","/img/**"); // static file 권한 무시
     }
 
     @Override
@@ -51,8 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/user/**").permitAll() // 회원가입, 로그인
-                .antMatchers("/api/survey/**/view").permitAll() // 설문조사 화면
                 .antMatchers("/api/survey/**/answer").permitAll() // 설문조사 답변
+                .antMatchers("/survey/**").permitAll() // 설문조사 화면
                 .anyRequest().authenticated() // 나머지 API 는 전부 인증 필요
 
                 // JwtFilter 를 addFilterBefore 로 등록했던 JwtSecurityConfig 클래스를 적용
