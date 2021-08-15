@@ -20,10 +20,13 @@ public class QuestionRepository {
     }
 
     public List<Question> findAll(Long surverId){
-        List<Question> questionList = em.createQuery("select q from Question q where q.survey.id = 2", Question.class)
+        List<Question> questionList = em.createQuery("select q from Question q where q.survey.id =:surverId order by q.no ASC", Question.class)
+                .setParameter("surverId",surverId)
                 .getResultList();
         return questionList;
     }
+
+
 
 
 }

@@ -2,17 +2,14 @@ package com.bside.app.controller.api;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter @Setter
 public class AnswerForm {
-
-    private String title;
-    private AnswerRequest[] answer;
-
-    @Data
-    class AnswerRequest{
-        private Long questionId;
-        private String commment;
-    }
+    private Long questionId;
+    private String comment;
 }
