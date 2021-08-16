@@ -123,7 +123,7 @@ public class SurveyAPIController {
             data.put("status", survey.getStatus());
             data.put("title", survey.getTitle());
             data.put("content", survey.getContent());
-            allData.put("",data);
+            allData.put("survey_list",data);
         });
 
         return new ApiResponse(200, "성공", allData);
