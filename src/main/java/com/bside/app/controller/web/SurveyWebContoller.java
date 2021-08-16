@@ -24,12 +24,15 @@ import java.util.Map;
 @RequestMapping("/survey")
 public class SurveyWebContoller {
 
+    private final SurveyService surveyService;
     private final QuestionService questionService;
     private final AnswerService answerService;
 
     @RequestMapping("/{surveyId}/view")
     public String surveyView (@PathVariable Long surveyId, Model model){
-        model.addAttribute("surveyId",surveyId);
+
+        Survey survey = surveyService.findById(surveyId);
+        model.addAttribute("survey",survey);
         return "index";
     }
 
