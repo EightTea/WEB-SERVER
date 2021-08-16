@@ -16,4 +16,5 @@ public interface UserService {
     JwtToken reissue(TokenForm tokenForm);
     Optional<User> findOne(Long id);
     User getMyInfo();
+    boolean validateJoinUser(Long userId);
 }

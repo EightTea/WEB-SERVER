@@ -32,6 +32,14 @@ public class UserController {
         return new ResponseEntity<>(new ApiResponse("회원가입/로그인 성공", data),HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> checkUser(@PathVariable Long id){
+        Map<String, Object> data = new HashMap<>();
+
+        data.put("user", userService.validateJoinUser(id));
+        return new ResponseEntity<>(new ApiResponse("회원가입 여부", data),HttpStatus.OK);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> leave(@PathVariable Long id){
         userService.leave(id);
