@@ -18,7 +18,7 @@
       </span>
       <img class="intro-image" src="/img/Saly-26.png"/>
     </div>
-    
+
     <div class="sub-content intro">
       <div class="intro-sub">
           <label>저희 카페에 방문하는 이유가 무엇인지 손님분들의 이야기를 듣고자합니다.
@@ -26,18 +26,19 @@
         </label>
       </div>
     </div>
-    
+
     <div class="footer">
-      <button class="btn" onclick="fnGoAnswer(); return false;">
+      <button class="btn" th:onclick="'fnGoAnswer(' + ${questionId} + '); return false;'">
         답변 렛츠 고!
       </button>
     </div>
-      
+
   </div>
 </body>
 <script>
-function fnGoAnswer() {
-  document.location.href="/survey/1/answer";
+function fnGoAnswer(questionId) {
+
+  document.location.href="/survey/" + questionId+ "/answer";
 }
 
 </script>

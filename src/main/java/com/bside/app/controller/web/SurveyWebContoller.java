@@ -28,7 +28,8 @@ public class SurveyWebContoller {
     private final AnswerService answerService;
 
     @RequestMapping("/{surveyId}/view")
-    public String surveyView (){
+    public String surveyView (@PathVariable Long surveyId, Model model){
+        model.addAttribute("surveyId",surveyId);
         return "index";
     }
 
