@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head th:replace="fragments/header :: header">
+  <title>Title</title>
+</head>
+<style>
+
+</style>
+<script th:inline="javascript">
+
+  document.addEventListener("DOMContentLoaded", function() {
+
+    currentQuestionNo = 1;
+    questionCnt = document.getElementsByClassName("question-wrapper").length;
+    document.getElementsByClassName("question-wrapper")[currentQuestionNo-1].style.display=""
+
+    fnSetProgressBar();
+  });
+
+  var currentQuestionNo = 1;
+  var questionCnt = 0;
+
+  function fnSetProgressBar(){
+    document.getElementsByClassName("progress-bar")[0].style.width= currentQuestionNo/questionCnt * 100 + "%"
+  }
+  function fnPreQuestion(){
+    currentQuestionNo--;
+    if( document.getElementsByClassName("question-wrapper")[currentQuestionNo-1] != null ) {
+      document.getElementsByClassName("question-wrapper")[currentQuestionNo].style.display="none";
+      document.getElementsByClassName("question-wrapper")[currentQuestionNo-1].style.display="";
+
+      if( document.getElementsByClassName("question-wrapper")[currentQuestionNo] == null ){
+        document.getElementById("nextBtn").innerText="답변 끝!";
+        document.getElementById("nextBtn").setAttribute("onClick","fnExitQuestion(); return false;");
+      } else {
+        document.getElementById("nextBtn").innerText="다음 질문";
+        document.getElementById("nextBtn").setAttribute("onClick","fnNextQuestion(); return false;");
+      }
+
+    } else {
+      alert("첫번째 질문입니다.");
+      currentQuestionNo++;
+    }
+    fnCheckAnswer( document.getElementsByName("comment")[currentQuestionNo-1] );
+    fnSetProgressBar();
+  }
+  function fnNextQuestion(){
+
+    if( document.getElementsByClassName("question-wrapper")[currentQuestionNo] != null ) {
+      document.getElementsByClassName("question-wrapper")[currentQuestionNo-1].style.display="none";
+      document.getElementsByClassName("question-wrapper")[currentQuestionNo].style.display="";
+      currentQuestionNo++;
+
+      if( document.getElementsByClassName("question-wrapper")[currentQuestionNo] == null ){
+        document.getElementById("nextBtn").innerText="답변 끝!";
+        document.getElementById("nextBtn").setAttribute("onClick","fnSubmitQuestion(); return false;");
+      } else {
+        document.getElementById("nextBtn").innerText="다음 질문";
+        document.getElementById("nextBtn").setAttribute("onClick","fnNextQuestion(); return false;");
+      }
+    }
+    fnCheckAnswer( document.getElementsByName("comment")[currentQuestionNo-1] );
+    fnSetProgressBar();
+  }
+
+  function fnSubmitQuestion(){
+
+    document.getElementById("aform").submit();
+  }
+
+  function fnCheckAnswer(elm){
+    if( elm.textLength != 0 ) {
+      document.getElementById("nextBtn").classList.remove("disabled")
+    } else {
+      document.getElementById("nextBtn").classList.add("disabled")
+    }
+  }
+
+</script>
+<body>
+  <div class="container">
+    
+    <div class="top">
+      <a class="arrow-left" onclick="fnPreQuestion(); return false;"></a>
+      <div class="progress-container">
+        <div class="progress-bar">
+        </div>
+      </div>
+    </div>
+
+    <form id="aform" method="post" th:action="'/survey/'+${surveyId}+'/answer'">
+    <div class="question-wrapper" th:each="question : ${questionList}" style="display: none">
+      <input type="hidden" name="questionId" th:value="${question.id}"/>
+      <div class="question-title">
+        <span th:utext="'<b>Q.' + ${question.no} + '</b>'+${question.content}">
+          <b>Q.1</b>
+          저희 카페에 자주 방문하는<br>
+          이유가 무엇인지 알려주세요
+        </span>
+        <th:block th:if="${question.fileUrl != null and question.fileUrl != ''}">
+        <div class="question-container">
+          <img th:src="${question.fileUrl}" width="100%" height="100%">
+        </div>
+        </th:block>
+      </div>
+      <div class="sub-content question">
+        <textarea name="comment" rows="10" maxlength="500" placeholder="진솔하고 자세한 답변은 너무너무 도움이 돼요" onkeyup="fnCheckAnswer(this); return false;"></textarea>
+      </div>
+    </div>
+
+    <div class="footer">
+      <button th:if="${questionList.size()} != 1" id="nextBtn" class="btn disabled" onclick="fnNextQuestion(); return false;">
+        다음 질문
+      </button>
+      <button th:unless="${questionList.size()} != 1" id="nextBtn" class="btn disabled" onclick="fnSubmitQuestion(); return false;">
+        답변 끝!!
+      </button>
+    </div>
+    </form>
+  </div>
+</body>
+</html>

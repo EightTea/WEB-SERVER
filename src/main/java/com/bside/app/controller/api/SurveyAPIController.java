@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +39,7 @@ public class SurveyAPIController {
     private final SurveyService surveyService;
     private final QuestionService questionService;
     private final AnswerService answerService;
+
     private final S3Uploader s3Uploader;
 
     @Value("${config.baseDomain}")
@@ -84,15 +87,23 @@ public class SurveyAPIController {
     }
 
     @PostMapping("/{survey}/answer")
-    public ApiResponse CreateAnswer ( @PathVariable("survey") int surveyNo , @ModelAttribute AnswerForm answerForm){
+    public ApiResponse CreateAnswer (@PathVariable("survey") Long surveyNo , @RequestBody List<AnswerForm> answerForms){
 
-        System.out.println("surveyNo = " + surveyNo);
-        System.out.println("answerForm = " + answerForm);
+        List<Answer> answers = new ArrayList<Answer>();
 
-        for( AnswerForm.AnswerRequest answerRequest :answerForm.getAnswer()) {
-            System.out.println( answerRequest.getQuestionId() );
-            System.out.println( answerRequest.getCommment() );
+        for( int i = 0 ; i < answerForms.size() ; i ++ ){
+            AnswerForm answerForm = answerForms.get(i);
+
+            Answer answer = new Answer();
+
+            answer.setSurveyId(surveyNo);
+            answer.setQuestionId(answerForm.getQuestionId());
+            answer.setComment(answerForm.getComment());
+
+            answers.add(answer);
         }
+
+        Long suerveryId = answerService.answers(answers);
 
         return new ApiResponse(200, "답변 성공", null );
     }
@@ -113,6 +124,7 @@ public class SurveyAPIController {
             data.put("status", survey.getStatus());
             data.put("title", survey.getTitle());
             data.put("content", survey.getContent());
+
             surveyData.add(data);
         });
 

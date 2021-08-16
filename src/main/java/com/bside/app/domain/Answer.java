@@ -4,7 +4,10 @@ package com.bside.app.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
@@ -17,5 +20,7 @@ public class Answer {
     private Long questionId;
     private Long targetSeq;
     private String comment;
-    private String date;
+
+    @CreatedDate
+    private LocalDateTime date;
 }
