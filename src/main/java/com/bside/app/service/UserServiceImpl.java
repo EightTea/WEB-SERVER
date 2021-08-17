@@ -47,12 +47,12 @@ public class UserServiceImpl implements UserService{
 
     /**
      * 사용자 검증
-     * @param user_id
+     * @param userId
      * @return 비회원 : 0, 탈퇴회원 : 1, 회원 : 2
      */
-    private int validateDuplicateUser(Long user_id){
+    private int validateDuplicateUser(Long userId){
 
-        Optional<User> findId = userRepository.findById(user_id);
+        Optional<User> findId = userRepository.findById(userId);
         // 비회원일 때
         if(findId.isEmpty()) return 0;
             // 탈퇴회원일 때
@@ -60,7 +60,6 @@ public class UserServiceImpl implements UserService{
             // 회원일 때
         else return 2;
     }
-
 
     @Transactional
     public JwtToken login(Long id){
@@ -70,6 +69,13 @@ public class UserServiceImpl implements UserService{
         return findOne.map(this::generateJwtToken).orElseThrow(() -> new IllegalStateException("해당 유저가 없습니다."));
     }
 
+    @Transactional
+    public boolean validateJoinUser(Long userId){
+        int result = validateDuplicateUser(userId);
+        if(result == 2) return true;
+        else return false;
+
+    }
     @Transactional
     public Long updateStore(Long id, String storeName){
         User user = this.findOne(id).get();

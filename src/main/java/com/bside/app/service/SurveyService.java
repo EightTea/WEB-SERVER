@@ -41,7 +41,7 @@ public class SurveyService {
 
     @Transactional
     public Survey findById(Long surveyId){
-        return surveyRepository.findById(surveyId);
+        return surveyRepository.findById(surveyId).get();
     }
 
     @Transactional
