@@ -40,6 +40,11 @@ public class SurveyService {
     }
 
     @Transactional
+    public Survey findById(Long surveyId){
+        return surveyRepository.findById(surveyId);
+    }
+
+    @Transactional
     public List<Survey> findServeys(Long userId){
 
         List<Survey> surveyList = surveyRepository.findAllByUserId(userId);

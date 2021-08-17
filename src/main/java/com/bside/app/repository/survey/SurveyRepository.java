@@ -27,6 +27,10 @@ public class SurveyRepository {
         return surveyList;
     }
 
+    public Survey findById(Long surveyId){
+        return em.find(Survey.class, surveyId);
+    }
+
     public Optional<Survey> findQrUrlById(Long userId){
         Survey survey = em.find(Survey.class, userId);
         return Optional.ofNullable(survey);
