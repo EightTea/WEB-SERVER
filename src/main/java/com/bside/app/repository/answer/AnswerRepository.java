@@ -8,11 +8,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface AnswerRepository extends JpaRepository<Answer, Integer> {
 
     @Query("select a from Answer a where a.surveyId = ?1 and a.questionId = ?2")
     Page<Answer> findBySurveyIdAndQuestionId(Long surveyId, Long questionId, Pageable pageable);
+
+    @Query("select a.targetSeq from Answer a where a.surveyId = ?1 group by a.targetSeq")
+    List<Long> countBySurveyId(Long surveyId);
 }
 /*
     public Page<Answer> findAll (Integer surveyId, Integer questionId){

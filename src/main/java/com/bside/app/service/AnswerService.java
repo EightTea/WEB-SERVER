@@ -4,6 +4,7 @@ import com.bside.app.domain.Answer;
 import com.bside.app.repository.answer.AnswerRepository;
 import com.bside.app.repository.seq.SeqRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AnswerService {
@@ -39,5 +41,12 @@ public class AnswerService {
 
         answerRepository.saveAll(answers);
         return answers.get(0).getSurveyId();
+    }
+
+    @Transactional
+    public int countAnswers(Long surveyId){
+        int answerCnt = answerRepository.countBySurveyId(surveyId).size();
+        log.debug("[surveyId - "+surveyId + "] : [answerCnt - "+answerCnt+"]");
+        return answerCnt;
     }
 }

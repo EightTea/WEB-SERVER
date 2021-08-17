@@ -118,12 +118,13 @@ public class SurveyAPIController {
         List<Object> surveyData = new ArrayList<>();
         surveyList.forEach( survey -> {
             Map<String, Object> data = new HashMap<>();
+            long answerCnt = answerService.countAnswers(survey.getId());
             data.put("survey_id", survey.getId());
             data.put("start_data", survey.getStartDate());
             data.put("end_data", survey.getEndDate());
             data.put("status", survey.getStatus());
             data.put("title", survey.getTitle());
-            data.put("content", survey.getContent());
+            data.put("answer_cnt", answerCnt);
 
             surveyData.add(data);
         });
