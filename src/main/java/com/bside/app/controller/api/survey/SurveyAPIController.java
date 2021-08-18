@@ -1,9 +1,8 @@
-package com.bside.app.controller.api;
+package com.bside.app.controller.api.survey;
 
 import com.bside.app.domain.Answer;
 import com.bside.app.domain.Question;
 import com.bside.app.domain.Survey;
-import com.bside.app.domain.SurveyStatus;
 import com.bside.app.response.ApiResponse;
 import com.bside.app.service.AnswerService;
 import com.bside.app.service.QuestionService;
@@ -11,13 +10,10 @@ import com.bside.app.service.SurveyService;
 import com.bside.app.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-    import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
