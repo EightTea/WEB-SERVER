@@ -1,4 +1,4 @@
-package com.bside.app.controller.api;
+package com.bside.app.controller.api.survey;
 
 import lombok.Data;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package com.bside.app.service;
 
-import com.bside.app.controller.user.TokenForm;
+import com.bside.app.controller.api.user.TokenForm;
 import com.bside.app.domain.JwtToken;
 import com.bside.app.domain.User;
 

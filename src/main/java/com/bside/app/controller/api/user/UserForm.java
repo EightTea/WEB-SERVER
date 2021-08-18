@@ -1,4 +1,4 @@
-package com.bside.app.controller.user;
+package com.bside.app.controller.api.user;
 
 
 import com.bside.app.domain.User;

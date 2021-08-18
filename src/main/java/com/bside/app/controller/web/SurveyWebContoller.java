@@ -1,10 +1,9 @@
 package com.bside.app.controller.web;
 
-import com.bside.app.controller.api.AnswerForm;
+import com.bside.app.controller.api.survey.AnswerForm;
 import com.bside.app.domain.Answer;
 import com.bside.app.domain.Question;
 import com.bside.app.domain.Survey;
-import com.bside.app.repository.question.QuestionRepository;
 import com.bside.app.service.AnswerService;
 import com.bside.app.service.QuestionService;
 import com.bside.app.service.SurveyService;
@@ -17,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
