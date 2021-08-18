@@ -167,7 +167,7 @@ public class SurveyAPIController {
         Page<Answer> answerList = answerService.findAnswers(surveyId, questionId, pageable);
         Map<String, Object> data = new HashMap<>();
         data.put("answer", answerList.getContent());
-        data.put("is_more", answerList.getTotalPages() > pageable.getPageNumber());
+        data.put("is_more", answerList.getTotalPages()-1 > pageable.getPageNumber());
 
         return new ApiResponse(200, "성공", data);
     }
